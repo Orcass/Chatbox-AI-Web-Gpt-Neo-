@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="chatbox">
+        <div id="chat-content">
+            <p><strong>Bot:</strong> Hello! How can I assist you today?</p>
+        </div>
+    </div>
+    <input type="text" id="message" placeholder="Type your message..." autocomplete="off"/>
+    <button id="send">Send</button>
+
+    <script>
+        $("#send").click(function() {
+            var userText = $("#message").val();
+            $("#message").val("");  // Clear the input field
+            $("#chat-content").append("<p><strong>You:</strong> " + userText + "</p>");
+            
+            $.get("/get", { msg: userText }, function(data) {
+                $("#chat-content").append("<p><strong>Bot:</strong> " + data.response + "</p>");
+                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);  // Scroll to the bottom
+            });
+        });
+    </script>
+</body>
+</html>
